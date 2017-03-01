@@ -1,5 +1,5 @@
 # Program designed to take in input image and provide three zoomed in images
-# (Eventually, and hopefully on the face)
+# and a composite image of all four for memeage.
 
 import os, sys
 import urllib.request
@@ -14,12 +14,24 @@ outfile_two = 'zoom_two.jpg'
 outfile_three = 'zoom_three.jpg'
 four_outfile = 'meme.jpg'
 
-# Get Input File From The Innanets
+# Get Input File From The Innanets. Check Validity.
 infile = input('Please Enter Full URL for the Image: ')
-infile = urllib.request.urlretrieve(infile, infile.split('/')[-1])
+try:
+    infile = urllib.request.urlretrieve(infile, infile.split('/')[-1])
+except urllib.error.URLError as error:
+    print('Something went wrong. Make sure your URL is valid.')
+    print('{}'.format(error))
+    quit()
 
-# Process the Input Image
-image = Image.open(infile[0])
+# Check that the image file is valid
+try:
+    image = Image.open(infile[0])
+except OSError as error:
+    print('Something went wrong. Make sure your URL points to an image.')
+    print('OS Error: {}'.format(error))
+    quit()
+
+# Process in the input image
 width, height = image.size
 crop_size = (round(.10 * width), round(.10 * height), round(.90 * width), round(.90 * height))
 zoom = image.crop(crop_size)
