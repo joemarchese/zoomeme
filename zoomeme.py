@@ -2,17 +2,24 @@
 # (Eventually, and hopefully on the face)
 
 import os, sys
+import urllib.request
 from PIL import Image
 
 # Generate Path Names
-infile = sys.argv[1]
-outfile = os.path.dirname(infile) + 'zoom.jpg'
-outfile_two = os.path.dirname(infile) + 'zoom_two.jpg'
-outfile_three = os.path.dirname(infile) + 'zoom_three.jpg'
-four_outfile = os.path.dirname(infile) + 'meme.jpg'
+if not os.path.exists(os.getcwd() + '\\Memes'):
+    os.mkdir(os.getcwd() + '\\Memes')
+os.chdir(os.getcwd() + '\\Memes')
+outfile = 'zoom.jpg'
+outfile_two = 'zoom_two.jpg'
+outfile_three = 'zoom_three.jpg'
+four_outfile = 'meme.jpg'
+
+# Get Input File From The Innanets
+infile = input('Please Enter Full URL for the Image: ')
+infile = urllib.request.urlretrieve(infile, infile.split('/')[-1])
 
 # Process the Input Image
-image = Image.open(infile)
+image = Image.open(infile[0])
 width, height = image.size
 crop_size = (round(.10 * width), round(.10 * height), round(.90 * width), round(.90 * height))
 zoom = image.crop(crop_size)
